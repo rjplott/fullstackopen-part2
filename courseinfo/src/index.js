@@ -4,7 +4,7 @@ import ReactDOM from "react-dom";
 const Header = (props) => <h1>{props.course.name}</h1>;
 
 const Part = (props) => (
-  <p>
+  <p key={props.id}>
     {props.part} {props.exercise}
   </p>
 );
@@ -12,7 +12,7 @@ const Part = (props) => (
 const Content = (props) => (
   <div>
     {props.course.parts.map((part) => (
-      <Part part={part.name} exercise={part.exercises} />
+      <Part part={part.name} exercise={part.exercises} key={part.id} />
     ))}
   </div>
 );
@@ -20,9 +20,7 @@ const Content = (props) => (
 const Total = (props) => (
   <p>
     Number of exercises{" "}
-    {props.course.parts[0].exercises +
-      props.course.parts[1].exercises +
-      props.course.parts[2].exercises}
+    {props.course.parts.reduce((sum, part) => sum + part.exercises, 0)}
   </p>
 );
 
