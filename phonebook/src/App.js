@@ -1,4 +1,7 @@
 import React, { useState } from "react";
+import Filter from "./components/Filter";
+import AddPeopleForm from "./components/AddPeopleForm";
+import Contacts from "./components/Contacts";
 
 const App = () => {
   const [persons, setPersons] = useState([
@@ -10,7 +13,6 @@ const App = () => {
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [peopleFilter, setPeopleFilter] = useState("");
-  const [filteredPeople, setFilteredPeople] = useState(persons);
 
   const handleNewName = (event) => {
     setNewName(event.target.value);
@@ -32,44 +34,26 @@ const App = () => {
   };
 
   const filterPhonebook = (event) => {
-    const currentFilter = event.target.value.toLowerCase();
-
-    setPeopleFilter(currentFilter);
-    setFilteredPeople(
-      persons.filter((person) =>
-        person.name.toLowerCase().includes(currentFilter)
-      )
-    );
+    setPeopleFilter(event.target.value.toLowerCase());
   };
+
+  const filteredPeople = persons.filter((person) =>
+    person.name.toLowerCase().includes(peopleFilter)
+  );
 
   return (
     <div>
       <h2>Phonebook</h2>
-      <div>
-        <label>
-          filter shown with{" "}
-          <input value={peopleFilter} onChange={filterPhonebook} />
-        </label>
-      </div>
-      <form onSubmit={handleFormSubmit}>
-        <div>
-          name: <input value={newName} onChange={handleNewName} />
-        </div>
-        <div>
-          number: <input value={newNumber} onChange={handleNewNumber} />
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
+      <Filter filter={peopleFilter} eventHandler={filterPhonebook} />
+      <AddPeopleForm
+        handleFormSubmit={handleFormSubmit}
+        nameValue={newName}
+        handleNewName={handleNewName}
+        numberValue={newNumber}
+        handleNewNumber={handleNewNumber}
+      />
       <h2>Numbers</h2>
-      <ul>
-        {filteredPeople.map((person) => (
-          <li key={person.name}>
-            {person.name} {person.number}
-          </li>
-        ))}
-      </ul>
+      <Contacts contacts={filteredPeople} />
     </div>
   );
 };
