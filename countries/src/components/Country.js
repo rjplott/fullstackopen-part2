@@ -1,9 +1,10 @@
 import React, { useState } from "react";
+import Weather from "./Weather";
 
 const Country = ({ displayDetails, country }) => {
   const [showDetails, setShowDetails] = useState(displayDetails);
 
-  const handleClick = (e) => {
+  const handleClick = () => {
     setShowDetails(true);
   };
 
@@ -30,6 +31,7 @@ const Country = ({ displayDetails, country }) => {
         ))}
       </ul>
       <img src={country.flag} alt="Country's flag" />
+      <Weather country={country} />
     </div>
   );
 };
