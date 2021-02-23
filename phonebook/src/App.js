@@ -3,12 +3,14 @@ import numberServices from "./services/numbers";
 import Filter from "./components/Filter";
 import AddPeopleForm from "./components/AddPeopleForm";
 import Contacts from "./components/Contacts";
+import Notification from "./components/Notification";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [peopleFilter, setPeopleFilter] = useState("");
+  const [notification, setNotification] = useState("test message");
 
   const handleNewName = (event) => {
     setNewName(event.target.value);
@@ -22,9 +24,13 @@ const App = () => {
     const checkDelete = window.confirm(`Do you really want to delete ${name}?`);
 
     if (checkDelete) {
-      numberServices
-        .deleteNumber(id)
-        .then(() => setPersons(persons.filter((person) => person.id !== id)));
+      numberServices.deleteNumber(id).then(() => {
+        setPersons(persons.filter((person) => person.id !== id));
+        setNotification(`${name} was successfully deleted!`);
+        setTimeout(() => {
+          setNotification("");
+        }, 5000);
+      });
     }
   };
 
@@ -41,18 +47,28 @@ const App = () => {
       if (updateNumber) {
         numberServices
           .updateNumber(person.id, { ...person, number: newNumber })
-          .then((updatedPerson) =>
+          .then((updatedPerson) => {
             setPersons(
               persons.map((person) =>
                 person.id === updatedPerson.id ? updatedPerson : person
               )
-            )
-          );
+            );
+            setNotification(`${person.name} was successfully updated!`);
+            setTimeout(() => {
+              setNotification("");
+            }, 5000);
+          });
       }
     } else {
       numberServices
         .addNumber({ name: newName, number: newNumber })
-        .then((newContact) => setPersons(persons.concat(newContact)));
+        .then((newContact) => {
+          setPersons(persons.concat(newContact));
+          setNotification(`${newContact.name} was added successfully!`);
+          setTimeout(() => {
+            setNotification("");
+          }, 5000);
+        });
     }
 
     setNewName("");
@@ -78,6 +94,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={notification} />
       <Filter filter={peopleFilter} eventHandler={filterPhonebook} />
       <AddPeopleForm
         handleFormSubmit={handleFormSubmit}
