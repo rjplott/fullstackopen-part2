@@ -11,6 +11,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState("");
   const [peopleFilter, setPeopleFilter] = useState("");
   const [notification, setNotification] = useState("test message");
+  const [isError, setIsError] = useState(false);
 
   const handleNewName = (event) => {
     setNewName(event.target.value);
@@ -57,6 +58,19 @@ const App = () => {
             setTimeout(() => {
               setNotification("");
             }, 5000);
+          })
+          .catch((error) => {
+            setIsError(true);
+            setNotification(
+              `${person.name} was already deleted from the server`
+            );
+
+            setPersons(persons.filter((p) => p.id !== person.id));
+
+            setTimeout(() => {
+              setNotification("");
+              setIsError(false);
+            }, 5000);
           });
       }
     } else {
@@ -94,7 +108,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={notification} />
+      <Notification message={notification} isError={isError} />
       <Filter filter={peopleFilter} eventHandler={filterPhonebook} />
       <AddPeopleForm
         handleFormSubmit={handleFormSubmit}
