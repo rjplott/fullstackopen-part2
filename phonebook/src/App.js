@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import numberServices from "./services/numbers";
 import Filter from "./components/Filter";
 import AddPeopleForm from "./components/AddPeopleForm";
 import Contacts from "./components/Contacts";
@@ -23,12 +23,9 @@ const App = () => {
 
     persons.find((person) => person.name === newName)
       ? alert(`${newName} is already added to phonebook`)
-      : axios
-          .post("http://localhost:3001/persons", {
-            name: newName,
-            number: newNumber,
-          })
-          .then((response) => setPersons(persons.concat(response.data)));
+      : numberServices
+          .addNumber({ name: newName, number: newNumber })
+          .then((newContact) => setPersons(persons.concat(newContact)));
 
     setNewName("");
     setNewNumber("");
@@ -39,9 +36,9 @@ const App = () => {
   };
 
   const hook = () => {
-    axios
-      .get("http://localhost:3001/persons")
-      .then((response) => setPersons(response.data));
+    numberServices
+      .getNumbers()
+      .then((initialNumbers) => setPersons(initialNumbers));
   };
 
   const filteredPeople = persons.filter((person) =>
