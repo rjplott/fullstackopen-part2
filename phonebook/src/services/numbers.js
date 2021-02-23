@@ -17,10 +17,16 @@ const deleteNumber = (id) => {
   return request.then((response) => response.data);
 };
 
+const updateNumber = (id, number) => {
+  const request = axios.put(`${baseUrl}/${id}`, number);
+  return request.then((response) => response.data);
+};
+
 const numberServices = {
   getNumbers,
   addNumber,
   deleteNumber,
+  updateNumber,
 };
 
 export default numberServices;

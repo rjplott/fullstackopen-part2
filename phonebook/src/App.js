@@ -31,11 +31,29 @@ const App = () => {
   const handleFormSubmit = (event) => {
     event.preventDefault();
 
-    persons.find((person) => person.name === newName)
-      ? alert(`${newName} is already added to phonebook`)
-      : numberServices
-          .addNumber({ name: newName, number: newNumber })
-          .then((newContact) => setPersons(persons.concat(newContact)));
+    const person = persons.find((person) => person.name === newName);
+
+    if (person) {
+      const updateNumber = window.confirm(
+        `${newName} is already added to phonebook.  Would you like to update their information?`
+      );
+
+      if (updateNumber) {
+        numberServices
+          .updateNumber(person.id, { ...person, number: newNumber })
+          .then((updatedPerson) =>
+            setPersons(
+              persons.map((person) =>
+                person.id === updatedPerson.id ? updatedPerson : person
+              )
+            )
+          );
+      }
+    } else {
+      numberServices
+        .addNumber({ name: newName, number: newNumber })
+        .then((newContact) => setPersons(persons.concat(newContact)));
+    }
 
     setNewName("");
     setNewNumber("");
