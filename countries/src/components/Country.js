@@ -1,8 +1,21 @@
-import React from "react";
+import React, { useState } from "react";
 
 const Country = ({ displayDetails, country }) => {
-  if (!displayDetails) {
-    return <div>{country.name}</div>;
+  const [showDetails, setShowDetails] = useState(displayDetails);
+
+  const handleClick = (e) => {
+    setShowDetails(true);
+  };
+
+  if (!showDetails) {
+    return (
+      <div>
+        {country.name}{" "}
+        <button type="button" onClick={handleClick}>
+          show
+        </button>
+      </div>
+    );
   }
 
   return (
