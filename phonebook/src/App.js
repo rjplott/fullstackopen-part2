@@ -18,6 +18,16 @@ const App = () => {
     setNewNumber(event.target.value);
   };
 
+  const handleDeletePerson = (id, name) => {
+    const checkDelete = window.confirm(`Do you really want to delete ${name}?`);
+
+    if (checkDelete) {
+      numberServices
+        .deleteNumber(id)
+        .then(() => setPersons(persons.filter((person) => person.id !== id)));
+    }
+  };
+
   const handleFormSubmit = (event) => {
     event.preventDefault();
 
@@ -59,7 +69,7 @@ const App = () => {
         handleNewNumber={handleNewNumber}
       />
       <h2>Numbers</h2>
-      <Contacts contacts={filteredPeople} />
+      <Contacts deleteHandler={handleDeletePerson} contacts={filteredPeople} />
     </div>
   );
 };

@@ -1,7 +1,7 @@
 import React from "react";
 import Contact from "./Contact";
 
-const Contacts = ({ contacts }) => {
+const Contacts = ({ contacts, deleteHandler }) => {
   return (
     <ul>
       {contacts.map((contact) => (
@@ -9,6 +9,7 @@ const Contacts = ({ contacts }) => {
           key={contact.name}
           name={contact.name}
           number={contact.number}
+          deletePerson={() => deleteHandler(contact.id, contact.name)}
         />
       ))}
     </ul>
